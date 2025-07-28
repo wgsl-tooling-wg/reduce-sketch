@@ -5,26 +5,28 @@ _Very much a work in progress._
 ### Some Highlights
 [reduceWorkgroup.wesl](./src/reduce/shaders/reduceWorkgroup.wesl)
 - a reduction function using subgroups
+- translated from [jdo's original](https://github.com/jowens/webgpu-benchmarking/blob/eec1d7191a6d0b2c809a360380b1d1f52e321c37/wgslFunctions.mjs#L324C1-L325C1) 
+which relies heavily on string templating.
 - uses several features in current WESL:
+  - `import` for modularity
   - `@if` conditions
   - name uniqueness (via mangling)
-  - imports for modularity
-- sketches the use of several proposed features: 
-  - generics on functions, variables, and structs (search for <E>)
-    - global inference is assumed for wgTemp. (but implement with
-      local inference only first (and more annotations))
-  - host/shader overridable constants (search for override const) 
+- sketches the use of several proposed WESL features: 
+  - generics on functions, variables, and structs (search for `<E>`)
+    - global inference for wgTemp. 
+      (but we'd implement local inference first)
+  - host/shader overridable constants (search for `override const`) 
 
 [reduceBuffer.wesl](./src/reduce/shaders/reduceBuffer.wesl)
   - calls reduceWorkgroup
-  - uses `import ... with` feature idea to set override const
-  - override fn for mapFn prior to reduce (typically set via host code)
+  - uses `import ... with` feature idea to set `override const` values in `reduceWorkgroup.wesl`
+  - `override fn` for mapFn prior to reduce (typically set via host code, see `JustReduce`)
 
 [binOp.wesl](./src/reduce/shaders/binOps.wesl)
-  - code snippets that can be imported from TypeScript or shaders
+  - code snippets for reduction that can be imported from TypeScript or from other wesl shaders
 
 [ReduceBuffer.ts](./src/reduce/ReduceBuffer.ts)
-  - api for an example HostedShader,
+  - api for an example HostedShader -
     i.e. a library with both host and shader code
 
 [JustReduce.ts](./src/app/JustReduce.ts)
