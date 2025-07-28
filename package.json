@@ -1,4 +1,15 @@
 {
   "name": "host-shader",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@biomejs/biome": "^2.1.2",
+    "@webgpu/types": "^0.1.64",
+    "vite": "^7.0.6",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "thimbleberry": "^0.2.10",
+    "wesl": "^0.6.9",
+    "wesl-plugin": "^0.6.9"
+  }
 }

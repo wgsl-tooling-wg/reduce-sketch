@@ -1,32 +1,32 @@
 export function wgReduce(args = {}) {
-    const env = { ...this.env, ...args }; // properties in args overwrite this.env
+  const env = { ...this.env, ...args }; // properties in args overwrite this.env
 
-    /** The normal case would be that we only need one function of each type
-     * thus we can use the shortFnName for declaration and call, and can do
-     * everything within a template string.
-     * But if we need more flexibility (here, more than one reduce call in
-     * a module), we should do it outside the template string. Until that is
-     * necessary, this capability has not been used and is untested.
-     *
-     * Primitive-specific args are:
-     * - wgTempIsArgument: if true, pass in a temp array for temporary use
-     * - useLongFunctionName: use config-specific name, otherwise wgReduce
-     * Default for all of these is "false".
-     */
-    const shortFnName = "wgReduce";
-    /* every entry in params below needs to be a member of env */
-    const params = ["binop", "datatype", "workgroupSize", "SUBGROUP_MIN_SIZE"];
-    for (const necessary of params) {
-      if (!(necessary in env)) {
-        console.warn(`wgReduce: field '${necessary}' must be set in env`);
-      }
+  /** The normal case would be that we only need one function of each type
+   * thus we can use the shortFnName for declaration and call, and can do
+   * everything within a template string.
+   * But if we need more flexibility (here, more than one reduce call in
+   * a module), we should do it outside the template string. Until that is
+   * necessary, this capability has not been used and is untested.
+   *
+   * Primitive-specific args are:
+   * - wgTempIsArgument: if true, pass in a temp array for temporary use
+   * - useLongFunctionName: use config-specific name, otherwise wgReduce
+   * Default for all of these is "false".
+   */
+  const shortFnName = "wgReduce";
+  /* every entry in params below needs to be a member of env */
+  const params = ["binop", "datatype", "workgroupSize", "SUBGROUP_MIN_SIZE"];
+  for (const necessary of params) {
+    if (!(necessary in env)) {
+      console.warn(`wgReduce: field '${necessary}' must be set in env`);
     }
-    const config = params.map((param) => env[param]).join("_");
-    const wgTemp = env.wgTempIsArgument ? "wgTemp" : `wg_temp_${config}`;
-    const declareAndUseLocalWgTemp = !env.wgTempIsArgument;
-    const longFnName = `${shortFnName}_${config}`;
-    const fnName = env?.useLongFunctionName ? longFnName : shortFnName;
-    const fn = /* wgsl */ `
+  }
+  const config = params.map(param => env[param]).join("_");
+  const wgTemp = env.wgTempIsArgument ? "wgTemp" : `wg_temp_${config}`;
+  const declareAndUseLocalWgTemp = !env.wgTempIsArgument;
+  const longFnName = `${shortFnName}_${config}`;
+  const fnName = env?.useLongFunctionName ? longFnName : shortFnName;
+  const fn = /* wgsl */ `
 ${
   declareAndUseLocalWgTemp
     ? `const TEMP_${longFnName}_MEM_SIZE = 2 * ${env.workgroupSize} / ${env.SUBGROUP_MIN_SIZE};
@@ -87,5 +87,5 @@ fn ${fnName}(// in: ptr<storage, array<${env.datatype}>, read>,
   }
   return f_red;
 }`;
-    return fn;
+  return fn;
 }

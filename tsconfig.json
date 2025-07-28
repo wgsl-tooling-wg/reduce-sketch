@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2024", "DOM", "DOM.Iterable", "DOM.AsyncIterable"],
+    "target": "ES2024",
+    "types": ["@webgpu/types"],
+    "moduleResolution": "bundler",
+
+    "noEmit": true,
+    "allowImportingTsExtensions": true
+  },
+  "exclude": ["**/node_modules"]
+}
