@@ -1,12 +1,13 @@
 import super::builtins;
 import super::reduceWorkgroup::{workgroupReduce, BinOp} with {workgroupSize, subgroupMinSize};
 
-// override consts filled in by host code (or importer)
+// override consts and override fns can be filled in by host code (or importer)
 override const workgroupSize: u32 = 256;         // threads per workgroup
 override const elementsPerThread: u32 = 4;       // elements processed per thread
 override const subgroupMinSize: u32 = 32;        // minimum subgroup size
-override fn mapFn<I, D>(value: I) -> D {
-  return value; // identity mapping, can be overridden by user
+
+override fn mapFn<I, D>(value: I) -> D {         // caller can inject a mapFn
+  return value; // identity mapping by default
 }
 
 @group(0) @binding(1) var<storage, read> inBuffer: array<I>; 

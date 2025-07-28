@@ -23,5 +23,7 @@ function sum<T>(a: T, b: T) -> T {
 
 
 /** TODO
-  - binary operations that aren't subgroup operations (histogram merge, 64-bit min, etc.)
+  - consider binary operations that aren't subgroup operations (histogram merge, 64-bit min, etc.)
+  - consider whether host code can inject generic parameters
+  - consider defining conditions in wesl. 
 */

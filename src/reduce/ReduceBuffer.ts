@@ -1,7 +1,7 @@
 /// <reference types="wesl-plugin/suffixes" />
-import { link } from "wesl";
 import type { HostedShader } from "../api/HostedShader";
 import type { WeslFunction, WeslStruct, WeslValue } from "../api/Reflection";
+import { link2 } from "../linker/Linker2.ts";
 import reduceBufferLink from "../shaders/reduceBuffer.wesl?link";
 import { type ReduceSetup, setupReduce } from "./ReduceBufferSetup.ts";
 
@@ -11,7 +11,7 @@ interface ReduceBufferParams<T> {
   inputBuffer: GPUBuffer;
 
   /** reduction operation */
-  binop: BinOp<T>;
+  binOp: BinOp<T>;
 
   /** store reduced output value in this buffer, will be created if not provided */
   outputBuffer?: GPUBuffer;
@@ -21,7 +21,6 @@ interface ReduceBufferParams<T> {
    * can be a reflected function, a wgsl string, or a TypeGPU function */
   mapFn?: WeslFunction | string;
 
-  // TODO consider an Iterator api instead?
   inputStart?: number; // start reading the inputBuffer at this offset in bytes
   inputStride?: number; // bytes between input values
 
@@ -78,6 +77,7 @@ export function reduceBuffer<T>(
   function inputBuffer(buffer: GPUBuffer): ReduceBuffer<T>;
   function inputBuffer(buffer?: GPUBuffer): GPUBuffer | ReduceBuffer<T> {
     if (buffer) {
+      destroy();
       _inputBuffer = buffer;
       return api;
     }
@@ -108,8 +108,12 @@ export function reduceBuffer<T>(
   async function init(): Promise<ReduceSetup> {
     if (_initialized) return _initialized;
 
-    const linked = await link(reduceBufferLink);
-    const module = linked.createShaderModule(_device);
+    // Inject the binOp and mapFn, and transpile the shader to WGSL module
+    const { mapFn, binOp } = params;
+    const overrides = { binOp, mapFn };
+    const linked = await link2({ ...reduceBufferLink, overrides });
+    const module: GPUShaderModule = linked.createShaderModule(_device);
+
     _initialized = setupReduce(_device, _inputBuffer, module);
 
     return _initialized;
@@ -117,8 +121,15 @@ export function reduceBuffer<T>(
 
   function destroy(): void {
     if (_initialized) {
-      // TODO destroy buffers
       _initialized = undefined;
     }
   }
 }
+
+
+/* TODO
+  - consider an Iterator api instead?
+  - OptParam<T> for all params, so they can be lazy evaluated
+  - signals to manage internal dependencies (vs. init())
+  - destroy GPU resources when asked
+*/
