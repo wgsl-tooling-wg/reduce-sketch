@@ -10,13 +10,14 @@ override fn mapFn<I, D>(value: I) -> D {         // caller can inject a mapFn
   return value; // identity mapping by default
 }
 
+override fn binOp: BinOp<D>;                     // caller injects the binary operation
+
 @group(0) @binding(1) var<storage, read> inBuffer: array<I>; 
 @group(0) @binding(2) var<storage, read_write> outBuffer: array<D>; 
 
 @compute
 @workgroup_size(workgroupSize)
 fn reduceBuffer<D>(
-   binOp: BinOp<D>,
    builtinsUniform: builtins::Uniform,
    builtinsNonuniform: builtins::Nonuniform) {
 
