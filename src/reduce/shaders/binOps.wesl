@@ -12,9 +12,9 @@ struct BinOp<T> {
   - typescript programmers could import this from a WESL file and pass it `ReduceBuffer`
 */
 const sumF32 = BinOp<f32>(
-  @if(SUBGROUPS) subgroupReduceOp: subgroupAdd,
-  @else reduceOp: sum,
-  identity: 0.0
+  @if(SUBGROUPS) subgroupAdd,
+  @else sum,
+  0.0
 );
 
 function sum<T>(a: T, b: T) -> T {
