@@ -37,7 +37,7 @@ The flow in the example is as follows:
 [origReduce](./src/orig-reduce/origReduce.ts) (based on 
 [jdo's wgReduce][jdo-reduce]). a state of the art subgroup based
 reduction for WebGPU. 
-origReduce relies heavily on custom string interpolation 
+The implementation relies heavily on custom string interpolation 
 to flexibly construct WGSL.
 
 We're going to try and imagine standard language features
@@ -92,6 +92,9 @@ The proposed code extends current WGSL/WESL:
 - [reflection](https://github.com/wgsl-tooling-wg/wesl-spec/issues/51)
   - allows host code to reference wgsl code, to select reduce variations
     or inject map prior to reduce.
+- [export](https://github.com/wgsl-tooling-wg/wesl-spec/issues/65)
+  - explicit control of what's visible to host code.
+    (not a critical feature for this example, but included for relevance)
 
 see TODO comments in the sources for future work.
 

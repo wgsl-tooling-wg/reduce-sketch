@@ -1,7 +1,7 @@
 import super::builtins;
 import super::binOps::BinOp;
 
-/** These must be overridden by host code or importing shader module */
+/** These must be overridden by an importing shader module */
 override const workgroupSize: u32;                       
 override const subgroupMinSize: u32;
 
