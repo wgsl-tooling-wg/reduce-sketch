@@ -1,12 +1,51 @@
-An exploration of future WESL/WGSL/HostedShader ideas by sketching gpu parallel reduction.
+An exploration of future WESL/WGSL/HostedShader ideas by sketching parts of gpu parallel reduction. 
 
-_Very much a work in progress._
+The starting point is John Owen's implementation of [workgroupReduce][jdo-reduce].
+We implement `workgroupReduce()` 
+in a hypothetical future version of WESL/WGSL to explore the needed
+shader language featurs.
+We also implement the host code integration to use `workgroupReduce`
+as part of a larger `reduceBuffer()` kernel to clarify
+the integration issues.
+
+- It looks like the `workgroupReduce()` shader function can be handled cleanly with a few extra features in WESL/WGSL.  
+Most of the needed extra features for `workgroupReduce()` 
+have been requested for other projects too, 
+and so are good candidates to prioritize for the next rev of WESL.
+
+The implementation sketch here also shows reducing an entire GPUBuffer 
+(not just a workgroup sized shader array).
+That requires multiple kernel dispatches, intermediate buffers, 
+linking control from host code. 
+See [host+shader libraries](https://hackmd.io/@mighdoll/ryM8IYqXlg) for a
+general discussion. 
+
+The goal of this part of the sketch is show a way forward on a number
+of integration issues: 
+between shader modules, 
+between
+host and shader code, and between the application and hosted shader libraries.
+The flow in the example is as follows:
+- `JustReduce.ts` (app)
+- -> `ReduceBuffer.ts` (TS api)
+- -> `reduceBuffer()` (shader kernel)
+- -> `workgroupReduce()` (shader module) 
+
+
+### Summary
 
 ### Some Highlights
+[origReduce](./src/orig-reduce/origReduce.ts) (based on 
+[jdo's wgReduce][jdo-reduce]). a state of the art subgroup based
+reduction for WebGPU. 
+origReduce relies heavily on custom string interpolation 
+to flexibly construct WGSL.
+
+We're going to try and imagine standard language features
+to allow writing functions like this w/o custom string interpolation.
+
 [reduceWorkgroup.wesl](./src/reduce/shaders/reduceWorkgroup.wesl)
-- a reduction function using subgroups
-- translated from [jdo's original](https://github.com/jowens/webgpu-benchmarking/blob/eec1d7191a6d0b2c809a360380b1d1f52e321c37/wgslFunctions.mjs#L324C1-L325C1) 
-which relies heavily on string templating.
+- an implementation using current and proposed features of WESL.
 - uses several features in current WESL:
   - `import` for modularity
   - `@if` conditions
@@ -33,7 +72,7 @@ which relies heavily on string templating.
   - shows a TypeScript application importing a binOp from .wesl,
     and passing it to ReduceBuffer.
 
-### Proposed WESL/WGSL Features Used
+### Proposed WESL/WGSL Features
 The proposed code extends current WGSL/WESL:
 - [generics](https://github.com/wgsl-tooling-wg/wesl-spec/issues/112)
   - declared on functions or structs
@@ -42,11 +81,14 @@ The proposed code extends current WGSL/WESL:
   - as function arguments (e.g. mapFn)
   - in structs (e.g. subgroupBinOp)
   - function types
-  - (no dynamic dispatch to different function, just static)
+  - note: no dynamic dispatch here, function pointers are statically resolved.
 - [override const](https://github.com/wgsl-tooling-wg/wesl-spec/issues/132)
   - module level `override const` values that can be set by other shaders or by host code
     - importing shaders use import `with` statement
     - host code, e.g. via link({constants});
 - override fn
   - like override const, but for functions.
-  - (values can overriden by shaders or host code as with `override const`)
+  - values can overriden by shaders or host code as with `override const`
+
+
+[jdo-reduce]: https://github.com/jowens/webgpu-benchmarking/blob/eec1d7191a6d0b2c809a360380b1d1f52e321c37/wgslFunctions.mjs#L324C1-L325C1
