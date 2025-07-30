@@ -26,7 +26,7 @@ between shader modules,
 between
 host and shader code, and between the application and hosted shader libraries.
 The flow in the example is as follows:
-- `JustReduce.ts` (app)
+- `JustReduce.ts` (app) or `SimulationReduce.ts`
 - -> `ReduceBuffer.ts` (TS api)
 - -> `reduceBuffer()` (shader kernel)
 - -> `workgroupReduce()` (shader module) 
