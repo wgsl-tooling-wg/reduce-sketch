@@ -1,16 +1,17 @@
 import super::builtins;
-import super::reduceWorkgroup::{workgroupReduce, BinOp} with {workgroupSize, subgroupMinSize};
+// import and fill in our override consts in workgroupReduce with our values
+import super::reduceWorkgroup::{workgroupReduce, BinOp} with {workgroupSize, subgroupMinSize}; 
 
-// override consts and override fns can be filled in by host code (or importer)
+// override consts and override fns can be filled in by host code, or importing shader module
 override const workgroupSize: u32 = 256;         // threads per workgroup
 override const elementsPerThread: u32 = 4;       // elements processed per thread
 override const subgroupMinSize: u32 = 32;        // minimum subgroup size
 
-override fn mapFn<I, D>(value: I) -> D {         // caller can inject a mapFn
+override fn mapFn<I, D>(value: I) -> D {         // host can inject a mapFn
   return value; // identity mapping by default
 }
 
-override fn binOp: BinOp<D>;                     // caller injects the binary operation
+override fn binOp: BinOp<D>;                     // host must inject the binary operation
 
 @group(0) @binding(1) var<storage, read> inBuffer: array<I>; 
 @group(0) @binding(2) var<storage, read_write> outBuffer: array<D>; 

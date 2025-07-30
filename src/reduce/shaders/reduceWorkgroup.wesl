@@ -1,7 +1,7 @@
 import super::builtins;
 import super::binOps::BinOp;
 
-/** WESL these can be overridden by host code (or wesl code that imports) */
+/** These must be overridden by host code or importing shader module */
 override const workgroupSize: u32;                       
 override const subgroupMinSize: u32;
 

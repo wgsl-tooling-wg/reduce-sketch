@@ -31,7 +31,6 @@ The flow in the example is as follows:
 - -> `reduceBuffer()` (shader kernel)
 - -> `workgroupReduce()` (shader module) 
 
-
 ### Summary
 
 ### Some Highlights
@@ -85,10 +84,15 @@ The proposed code extends current WGSL/WESL:
 - [override const](https://github.com/wgsl-tooling-wg/wesl-spec/issues/132)
   - module level `override const` values that can be set by other shaders or by host code
     - importing shaders use import `with` statement
-    - host code, e.g. via link({constants});
+    - host code, e.g. via `link({overrides});` 
+    see [Linker2.ts](./src/linker/Linker2.ts)
 - override fn
-  - like override const, but for functions.
+  - like `override const`, but for functions.
   - values can overriden by shaders or host code as with `override const`
+- [reflection](https://github.com/wgsl-tooling-wg/wesl-spec/issues/51)
+  - allows host code to reference wgsl code, to select reduce variations
+    or inject map prior to reduce.
 
+see TODO comments in the sources for future work.
 
 [jdo-reduce]: https://github.com/jowens/webgpu-benchmarking/blob/eec1d7191a6d0b2c809a360380b1d1f52e321c37/wgslFunctions.mjs#L324C1-L325C1

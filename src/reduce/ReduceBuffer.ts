@@ -129,7 +129,7 @@ export function reduceBuffer<T>(
 
 /* TODO
   - consider an Iterator api instead?
-  - OptParam<T> for all params, so they can be lazy evaluated
-  - signals to manage internal dependencies (vs. init())
+  - use OptParam<T> for all params, so they can be lazy evaluated
+  - use signals to manage internal dependencies (vs. current init())
   - destroy GPU resources when asked
 */
