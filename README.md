@@ -1,9 +1,11 @@
 An exploration of future WESL/WGSL/HostedShader ideas by sketching parts of gpu parallel reduction. 
 
+### Summary
+
 The starting point is John Owen's implementation of [workgroupReduce][jdo-reduce].
 We implement `workgroupReduce()` 
 in a hypothetical future version of WESL/WGSL to explore the needed
-shader language featurs.
+shader language features.
 We also implement the host code integration to use `workgroupReduce`
 as part of a larger `reduceBuffer()` kernel to clarify
 the integration issues.
@@ -20,28 +22,28 @@ linking control from host code.
 See [host+shader libraries](https://hackmd.io/@mighdoll/ryM8IYqXlg) for a
 general discussion. 
 
-The goal of this part of the sketch is show a way forward on a number
-of integration issues: 
-between shader modules, 
-between
-host and shader code, and between the application and hosted shader libraries.
-The flow in the example is as follows:
-- `JustReduce.ts` (app) or `SimulationReduce.ts`
-- -> `ReduceBuffer.ts` (TS api)
-- -> `reduceBuffer()` (shader kernel)
-- -> `workgroupReduce()` (shader module) 
+-  The goal of this part of the sketch is show a way forward on a number
+  of integration issues: 
+  between shader modules, 
+  between
+  host and shader code, and between the application and hosted shader libraries.
 
-### Summary
+The top down control flow in the example sketch:
+  - `JustReduce.ts` (app) or `SimulationReduce.ts`
+  - -> `ReduceBuffer.ts` (TS api)
+  - -> `reduceBuffer()` (shader kernel)
+  - -> `workgroupReduce()` (shader module) 
 
-### Some Highlights
-[origReduce](./src/orig-reduce/origReduce.ts) (based on 
-[jdo's wgReduce][jdo-reduce]). a state of the art subgroup based
+
+### Code Highlights
+[origReduce](./src/orig-reduce/origReduce.ts) is a commented version of 
+[jdo's wgReduce][jdo-reduce], a state of the art subgroup based
 reduction for WebGPU. 
 The implementation relies heavily on custom string interpolation 
 to flexibly construct WGSL.
 
 We're going to try and imagine standard language features
-to allow writing functions like this w/o custom string interpolation.
+to allow writing functions like workgroup reduction w/o custom string interpolation.
 
 [reduceWorkgroup.wesl](./src/reduce/shaders/reduceWorkgroup.wesl)
 - an implementation using current and proposed features of WESL.
@@ -51,8 +53,7 @@ to allow writing functions like this w/o custom string interpolation.
   - name uniqueness (via mangling)
 - sketches the use of several proposed WESL features: 
   - generics on functions, variables, and structs (search for `<E>`)
-    - global inference for wgTemp. 
-      (but we'd implement local inference first)
+    - global inference for `wgTemp`. (tho likely implement local-only inference first)
   - host/shader overridable constants (search for `override const`) 
 
 [reduceBuffer.wesl](./src/reduce/shaders/reduceBuffer.wesl)
