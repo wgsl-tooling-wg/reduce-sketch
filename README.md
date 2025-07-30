@@ -69,7 +69,11 @@ to allow writing functions like this w/o custom string interpolation.
 
 [JustReduce.ts](./src/app/JustReduce.ts)
   - shows a TypeScript application importing a binOp from .wesl,
-    and passing it to ReduceBuffer.
+    and passing it to `ReduceBuffer`.
+
+[SimulationReduce.ts](./src/app/SimulationReduce.ts)
+  - shows a TypeScript application that runs a simulation and then
+    uses `ReduceBuffer`.
 
 ### Proposed WESL/WGSL Features
 The proposed code extends current WGSL/WESL:
