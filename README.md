@@ -93,8 +93,7 @@ The proposed code extends current WGSL/WESL:
   - allows host code to reference wgsl code, to select reduce variations
     or inject map prior to reduce.
 - [export](https://github.com/wgsl-tooling-wg/wesl-spec/issues/65)
-  - explicit control of what's visible to host code.
-    (not a critical feature for this example, but included for relevance)
+  - explicit modularity control for host code visible features.
 
 see TODO comments in the sources for future work.
 
