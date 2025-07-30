@@ -15,8 +15,8 @@
  
  */
 
-/* (This is just a sketch to show the basic idea.  
- *  likely we'd adapt or adopt TypeGPU types for WGSL.) */
+/* (This is just a sketch to show the basic idea.
+ *  Likely we'd adapt or adopt TypeGPU types for WGSL.) */
 
 export interface WeslStruct {
   [key: string]: WeslFunction | WeslValue<any>;

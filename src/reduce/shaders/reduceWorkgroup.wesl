@@ -6,24 +6,24 @@ override const workgroupSize: u32;
 override const subgroupMinSize: u32;
 
 const wgTempSize = 2 * workgroupSize / subgroupMinSize;
-var<workgroup> wgTemp<E>: array<E, wgTempSize>;          // workgroup memory for partial results
+var<workgroup> wgTemp<E>: array<E, wgTempSize>;          // Workgroup memory for partial results
   
-/* adapted from JDO's webgpu-benchmarking library: 
-  - called on each thread, returns the reduced value for the workgroup
+/* Adapted from JDO's webgpu-benchmarking library: 
+  - Called on each thread, returns the reduced value for the workgroup
   
   terminology:
-    workgroup - thread block, typically 256 threads:
-      - synchronize with a barrier, 
-      - share higher speed 'workgroup' memory within the workgroup
-      - contains multiple subgroups
+    workgroup - Thread block, typically 256 threads:
+      - Synchronize with a barrier 
+      - Share higher speed 'workgroup' memory within the workgroup
+      - Contains multiple subgroups
     subgroup - SIMD lockstep subset of threads inside the workgroup, typically 32 threads
-      - can use built in subgroup operations like subgroupMax
-    tile - workgroup sized chunk of data
-    lane - thread within a subgroup
-    spine - first thread of each subgroup
+      - Can use built-in subgroup operations like subgroupMax
+    tile - Workgroup-sized chunk of data
+    lane - Thread within a subgroup
+    spine - First thread of each subgroup
 
   generics:
-    E - output elem datatype (f32, i32, u32)
+    E - Output element datatype (f32, i32, u32)
 */
 @if(SUBGROUPS)
 fn workgroupReduce<E>(

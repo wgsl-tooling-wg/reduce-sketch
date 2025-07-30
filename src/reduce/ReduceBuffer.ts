@@ -10,55 +10,55 @@ interface ReduceBufferParams<T> {
   gpuDevice: GPUDevice;
   inputBuffer: GPUBuffer;
 
-  /** reduction operation */
+  /** Reduction operation */
   binOp: BinOp<T>;
 
-  /** store reduced output value in this buffer, will be created if not provided */
+  /** Store reduced output value in this buffer, will be created if not provided */
   outputBuffer?: GPUBuffer;
-  destOffset?: number; // offset in bytes for outputBuffer
+  destOffset?: number; // Offset in bytes for outputBuffer
 
-  /** translate elements before reduction
-   * can be a reflected function, a wgsl string, or a TypeGPU function */
+  /** Transform elements before reduction.
+   * Can be a reflected function, a WGSL string, or a TypeGPU function */
   mapFn?: WeslFunction | string;
 
-  inputStart?: number; // start reading the inputBuffer at this offset in bytes
-  inputStride?: number; // bytes between input values
+  inputStart?: number; // Start reading the inputBuffer at this offset in bytes
+  inputStride?: number; // Bytes between input values
 
-  /** not shown:
-   * - allow () => T for most fields, enabling lazy evaluation. e.g.
+  /** Not shown:
+   * - Allow () => T for most fields, enabling lazy evaluation. e.g.
    *    inputBuffer: GPUBuffer | () => GPUBuffer;
    */
 }
 
-/** api sketch for ReduceBuffer instance that the caller can use. */
+/** API sketch for ReduceBuffer instance that the caller can use. */
 interface ReduceBuffer<T> extends HostedShader {
-  /** * Users call reduce() directly for simple situations.
-   * (Use HostedShader's encode() api for more complicated cases) */
+  /** Users call reduce() directly for simple situations.
+   * (Use HostedShader's encode() API for more complicated cases) */
   reduce(): Promise<T>;
 
-  /* set or get the input buffer to reduce */
-  inputBuffer(buffer: GPUBuffer): ReduceBuffer<T>; // setter allows for chaining syntax
+  /* Set or get the input buffer to reduce */
+  inputBuffer(buffer: GPUBuffer): ReduceBuffer<T>; // Setter allows for chaining syntax
   inputBuffer(): GPUBuffer;
 
-  /* set or get the output buffer to reduce */
-  outputBuffer(buffer: GPUBuffer): ReduceBuffer<T>; // setter allows for chaining syntax
+  /* Set or get the output buffer for reduction result */
+  outputBuffer(buffer: GPUBuffer): ReduceBuffer<T>; // Setter allows for chaining syntax
   outputBuffer(): GPUBuffer;
 
-  /** not shown:
-   * - getter/setters for other values like (binOp, destOffset, etc.)
+  /** Not shown:
+   * - Getter/setters for other values like (binOp, destOffset, etc.)
    */
 }
 
-/** a struct from WESL/WGSL, typically obtained via reflection from a .wgsl/wesl file
- * (could also be constructed via wgsl/wesl string or typegpu) */
+/** A struct from WESL/WGSL, typically obtained via reflection from a .wgsl/.wesl file
+ * (could also be constructed via WGSL/WESL string or TypeGPU) */
 interface BinOp<T> extends WeslStruct {
   subgroupReduceOp?: WeslFunction;
   reduceOp: WeslFunction;
   identity: WeslValue<T>;
 }
 
-/** A shader collection combining elements in a GPUBuffer to a single value
- * e.g. sum, min, max, etc.
+/** A shader collection that combines elements in a GPUBuffer to a single value
+ * e.g., sum, min, max, etc.
  */
 export function reduceBuffer<T>(
   params: ReduceBufferParams<T>,
@@ -101,7 +101,7 @@ export function reduceBuffer<T>(
     return _outputBuffer as GPUBuffer;
   }
 
-  /** run the reduce in standalone mode */
+  /** Run the reduction in standalone mode */
   async function reduce(): Promise<T> {
     await init();
     const encoder = _device.createCommandEncoder({ label: name });
@@ -144,10 +144,10 @@ export function reduceBuffer<T>(
 }
 
 /* TODO
-  - use signals to manage internal dependencies (vs. current init())
-    - stoneberry has a POC for this, we should reimplement with current signals lib
-  - destroy GPU resources when asked
-  - use OptParam<T> for all params, so they can be lazy evaluated
-    - alternately, expose all params as objects with get/set methods. e.g. inputBuffer.get() / inputBuffer.set()
-  - consider an Iterator api instead of explicit stride/offset
+  - Use signals to manage internal dependencies (vs. current init())
+    - Stoneberry has a POC for this, we should reimplement with current signals lib
+  - Destroy GPU resources when asked
+  - Use OptParam<T> for all params, so they can be lazily evaluated
+    - Alternatively, expose all params as objects with get/set methods. e.g., inputBuffer.get() / inputBuffer.set()
+  - Consider an Iterator API instead of explicit stride/offset
 */

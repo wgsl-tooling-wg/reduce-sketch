@@ -1,17 +1,17 @@
 import super::builtins;
-// import and fill in our override consts in workgroupReduce with our values
+// Import and fill in our override consts in workgroupReduce with our values
 import super::reduceWorkgroup::{workgroupReduce, BinOp} with {workgroupSize, subgroupMinSize}; 
 
 // override consts and override fns can be filled in by host code, or importing shader module
-override const workgroupSize: u32 = 256;         // threads per workgroup
-override const elementsPerThread: u32 = 4;       // elements processed per thread
-override const subgroupMinSize: u32 = 32;        // minimum subgroup size
+override const workgroupSize: u32 = 256;         // Threads per workgroup
+override const elementsPerThread: u32 = 4;       // Elements processed per thread
+override const subgroupMinSize: u32 = 32;        // Minimum subgroup size
 
-override fn mapFn<I, D>(value: I) -> D {         // host can inject a mapFn
-  return value; // identity mapping by default
+override fn mapFn<I, D>(value: I) -> D {         // Host can inject a mapFn
+  return value; // Identity mapping by default
 }
 
-override fn binOp: BinOp<D>;                     // host must inject the binary operation
+override fn binOp: BinOp<D>;                     // Host must inject the binary operation
 
 @group(0) @binding(1) var<storage, read> inBuffer: array<I>; 
 @group(0) @binding(2) var<storage, read_write> outBuffer: array<D>; 
@@ -22,10 +22,10 @@ fn reduceBuffer<D>(
    builtinsUniform: builtins::Uniform,
    builtinsNonuniform: builtins::Nonuniform) {
 
-  let wgId = builtinsUniform.wgid.x;                // workgroup ID
-  let lidx = builtinsNonuniform.lidx;               // local thread index
-  let tileSize = workgroupSize * elementsPerThread; // number of elements processed by each workgroup
-  let tileStart = wgId * tileSize;                  // start index for this workgroup's tile
+  let wgId = builtinsUniform.wgid.x;                // Workgroup ID
+  let lidx = builtinsNonuniform.lidx;               // Local thread index
+  let tileSize = workgroupSize * elementsPerThread; // Number of elements processed by each workgroup
+  let tileStart = wgId * tileSize;                  // Start index for this workgroup's tile
   
   // Phase 1: Each thread loads and reduces elementsPerThread elements
   var threadSum = binOp.identity;

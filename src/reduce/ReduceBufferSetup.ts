@@ -16,16 +16,16 @@ export type BindingEntry =
   | Pick<GPUBindGroupLayoutEntry, "storageTexture">
   | Pick<GPUBindGroupLayoutEntry, "externalTexture">;
 
-/** setup GPU resources for reduction */
+/** Set up GPU resources for reduction */
 export function setupReduce(
   device: GPUDevice,
   _inputBuffer: GPUBuffer,
   module: GPUShaderModule,
 ): ReduceSetup {
   /*
-   * (only a sketch towards implementation here. the point is to
+   * (Only a sketch towards implementation here. The point is to
    *  focus on the interesting parts in ReduceBuffer.ts and
-   *  imagine that here we take care of the gpu boilerplate.)
+   *  imagine that here we take care of the GPU boilerplate.)
    */
   const _elementsPerThread = 4;
   const _threadsPerWorkgroup = 256;

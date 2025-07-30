@@ -1,11 +1,11 @@
 import { reduceBuffer } from "../reduce/ReduceBuffer.ts";
 import { randomBufferF32, requestGpuDevice } from "./GpuUtil.ts";
 
-/* importing from WGSL/WESL to typescript via reflection could look like this: */
+/* Importing from WGSL/WESL to TypeScript via reflection could look like this: */
 // import { sumF32 } from "../reduce/shaders/binOps.wesl";
 const sumF32 = null as any;
 
-/** sample app that sums a buffer full of f32s on the gpu.
+/** Sample app that sums a buffer full of f32s on the GPU.
  * Simple use of a hosted shader.
  */
 export async function appReduce(): Promise<void> {

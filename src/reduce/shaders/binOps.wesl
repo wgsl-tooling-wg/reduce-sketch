@@ -1,4 +1,4 @@
-/** type for binary operations, e.g. for reduce*/
+/** Type for binary operations, e.g., for reduce */
 struct BinOp<T> {
   @if(SUBGROUPS) subgroupBinOp: (a: T, b: T) -> T;
   @else binOps: (a: T, b: T) -> T;
@@ -7,9 +7,9 @@ struct BinOp<T> {
 }
 
 /* 
-  binary operation to sum floating point values
-  - wesl programmers could pass this as a parameter to `workgroupReduce`
-  - typescript programmers could import this from a WESL file and pass it `ReduceBuffer`
+  Binary operation to sum floating point values
+  - WESL programmers could pass this as a parameter to `workgroupReduce`
+  - TypeScript programmers could import this from a WESL file and pass it to `ReduceBuffer`
 */
 const sumF32 = BinOp<f32>(
   @if(SUBGROUPS) subgroupAdd,
@@ -23,7 +23,7 @@ function sum<T>(a: T, b: T) -> T {
 
 
 /** TODO
-  - consider binary operations that aren't subgroup operations (histogram merge, 64-bit min, etc.)
-  - consider whether host code can inject generic parameters
-  - consider defining conditions in wesl. 
+  - Consider binary operations that aren't subgroup operations (histogram merge, 64-bit min, etc.)
+  - Consider whether host code can inject generic parameters
+  - Consider defining conditions in WESL. 
 */
