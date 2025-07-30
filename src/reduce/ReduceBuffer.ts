@@ -45,7 +45,7 @@ interface ReduceBuffer<T> extends HostedShader {
   outputBuffer(): GPUBuffer;
 
   /** not shown:
-   * - getter/setters for other values like (outputBuffer, binOp, etc.)
+   * - getter/setters for other values like (binOp, destOffset, etc.)
    */
 }
 
