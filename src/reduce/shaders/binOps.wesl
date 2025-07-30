@@ -1,7 +1,7 @@
-/** binary operation for reductions */
+/** type for binary operations, e.g. for reduce*/
 struct BinOp<T> {
-  @if(SUBGROUPS) subgroupReduceOp: (a: T, b: T) -> T;
-  @else reduceOp: (a: T, b: T) -> T;
+  @if(SUBGROUPS) subgroupBinOp: (a: T, b: T) -> T;
+  @else binOps: (a: T, b: T) -> T;
 
   identity: T;
 }

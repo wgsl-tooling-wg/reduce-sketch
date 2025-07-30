@@ -50,7 +50,7 @@ fn workgroupReduce<E>(
 
   /* reduce all the root subgroups into wgTemp */
   let t_red = in;
-  let s_red = binOp.subgroupReduceOp(t_red);
+  let s_red = binOp.subgroupBinOp(t_red);
   if (sgid == 0u) {
     wgTemp[sid] = s_red;
   }
@@ -83,7 +83,7 @@ fn workgroupReduce<E>(
       let value = select(binOp.identity, wgTemp[lidx + top_offset], pred);
 
       // Perform subgroup reduction on the values (all threads in subgroup participate)
-      f_red = binOp.subgroupReduceOp(value);
+      f_red = binOp.subgroupBinOp(value);
 
       // Only the last thread of participating subgroups writes the reduced result
       if (pred && lane_pred) {

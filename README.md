@@ -40,7 +40,7 @@ The proposed code extends current WGSL/WESL:
   - applised to member types and, variable types, structs
 - [pluggable functions](https://github.com/wgsl-tooling-wg/wesl-spec/issues/133) 
   - as function arguments (e.g. mapFn)
-  - in structs (e.g. subgroupReduceOp)
+  - in structs (e.g. subgroupBinOp)
   - function types
   - (no dynamic dispatch to different function, just static)
 - [override const](https://github.com/wgsl-tooling-wg/wesl-spec/issues/132)

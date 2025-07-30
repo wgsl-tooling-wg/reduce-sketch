@@ -35,7 +35,7 @@ fn reduceBuffer<D>(
     if (idx < arrayLength(inBuffer)) {
       let rawValue = inBuffer[idx];
       let value = mapFn(rawValue);
-      threadSum = binOp.subgroupReduceOp(threadSum, value);
+      threadSum = binOp.subgroupBinOp(threadSum, value);
     }
   }
   
