@@ -92,8 +92,6 @@ The proposed code extends current WGSL/WESL:
 - [reflection](https://github.com/wgsl-tooling-wg/wesl-spec/issues/51)
   - allows host code to reference wgsl code, to select reduce variations
     or inject map prior to reduce.
-- [export](https://github.com/wgsl-tooling-wg/wesl-spec/issues/65)
-  - explicit modularity control for host code visible features.
 
 see TODO comments in the sources for future work.
 
