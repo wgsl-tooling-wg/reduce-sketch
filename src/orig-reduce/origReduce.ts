@@ -1,3 +1,26 @@
+/**
+ * String Template Parameters for wgReduce:
+ *
+ * Required parameters (must be in env):
+ * - binop: Object containing:
+ *   - identity: The identity value for the reduction operation (e.g., "0" for sum, "1" for product)
+ *   - subgroupReduceOp: The subgroup reduction operation function name
+ * - datatype: The WGSL data type for the reduction (e.g., "f32", "i32", "u32")
+ * - workgroupSize: The size of the workgroup (e.g., 64, 128, 256)
+ * - SUBGROUP_MIN_SIZE: Minimum subgroup size for the GPU
+ *
+ * Optional parameters:
+ * - wgTempIsArgument: If true, workgroup temp array is passed as function argument
+ *                     If false (default), temp array is declared locally
+ * - useLongFunctionName: If true, uses config-specific function name (e.g., wgReduce_add_f32_64_16)
+ *                        If false (default), uses short name "wgReduce"
+ *
+ * Generated template variables:
+ * - fnName: The function name (either shortFnName or longFnName based on useLongFunctionName)
+ * - longFnName: Full config-specific name combining shortFnName and config parameters
+ * - wgTemp: Name of the workgroup temporary array
+ * - declareAndUseLocalWgTemp: Boolean indicating if temp array should be declared locally
+ */
 export function wgReduce(args = {}) {
   const env = { ...this.env, ...args }; // properties in args overwrite this.env
 
