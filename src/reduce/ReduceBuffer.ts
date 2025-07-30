@@ -128,8 +128,10 @@ export function reduceBuffer<T>(
 
 
 /* TODO
-  - consider an Iterator api instead?
-  - use OptParam<T> for all params, so they can be lazy evaluated
   - use signals to manage internal dependencies (vs. current init())
+    - stoneberry has a POC for this, we should reimplement with current signals lib
   - destroy GPU resources when asked
+  - use OptParam<T> for all params, so they can be lazy evaluated
+    - alternately, expose all params as objects with get/set methods. e.g. inputBuffer.get() / inputBuffer.set()
+  - consider an Iterator api instead of explicit stride/offset
 */
