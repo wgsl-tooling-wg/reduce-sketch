@@ -38,7 +38,11 @@ interface ReduceBuffer<T> extends HostedShader {
 
   /* set or get the input buffer to reduce */
   inputBuffer(buffer: GPUBuffer): ReduceBuffer<T>; // setter allows for chaining syntax
-  inputBuffer(): GPUBuffer | undefined;
+  inputBuffer(): GPUBuffer;
+
+  /* set or get the output buffer to reduce */
+  outputBuffer(buffer: GPUBuffer): ReduceBuffer<T>; // setter allows for chaining syntax
+  outputBuffer(): GPUBuffer;
 
   /** not shown:
    * - getter/setters for other values like (outputBuffer, binOp, etc.)
@@ -62,6 +66,7 @@ export function reduceBuffer<T>(
   const name = "ReduceBuffer";
   const _device = params.gpuDevice;
   let _inputBuffer = params.inputBuffer;
+  let _outputBuffer = params.outputBuffer;
   let _initialized: ReduceSetup | undefined;
 
   const api = {
@@ -70,6 +75,7 @@ export function reduceBuffer<T>(
     destroy,
     reduce,
     inputBuffer,
+    outputBuffer,
   };
   return api;
 
@@ -82,6 +88,17 @@ export function reduceBuffer<T>(
       return api;
     }
     return _inputBuffer;
+  }
+
+  function outputBuffer(): GPUBuffer;
+  function outputBuffer(buffer: GPUBuffer): ReduceBuffer<T>;
+  function outputBuffer(buffer?: GPUBuffer): GPUBuffer | ReduceBuffer<T> {
+    if (buffer) {
+      destroy();
+      _outputBuffer = buffer;
+      return api;
+    }
+    return _outputBuffer as GPUBuffer;
   }
 
   /** run the reduce in standalone mode */
@@ -125,7 +142,6 @@ export function reduceBuffer<T>(
     }
   }
 }
-
 
 /* TODO
   - use signals to manage internal dependencies (vs. current init())
