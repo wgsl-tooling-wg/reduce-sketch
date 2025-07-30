@@ -1,4 +1,8 @@
 /**
+ * Original version of workgroupReduce with string templating.
+ * 
+ * (AI generated header comment, take with a grain of salt)
+ * 
  * String Template Parameters for wgReduce:
  *
  * Required parameters (must be in env):
@@ -15,11 +19,33 @@
  * - useLongFunctionName: If true, uses config-specific function name (e.g., wgReduce_add_f32_64_16)
  *                        If false (default), uses short name "wgReduce"
  *
- * Generated template variables:
- * - fnName: The function name (either shortFnName or longFnName based on useLongFunctionName)
- * - longFnName: Full config-specific name combining shortFnName and config parameters
+ * Generated template variables and their logic:
+ * 
+ * - config: String joining all params with "_" (e.g., "add_f32_64_16")
+ * 
  * - wgTemp: Name of the workgroup temporary array
- * - declareAndUseLocalWgTemp: Boolean indicating if temp array should be declared locally
+ *   - If wgTempIsArgument=true: "wgTemp" (passed as parameter)
+ *   - If wgTempIsArgument=false: "wg_temp_${config}" (e.g., "wg_temp_add_f32_64_16")
+ * 
+ * - declareAndUseLocalWgTemp: Boolean (inverse of wgTempIsArgument)
+ *   - If true: Emits workgroup array declaration before function
+ *   - If false: Expects wgTemp as function parameter
+ * 
+ * - longFnName: "${shortFnName}_${config}" (e.g., "wgReduce_add_f32_64_16")
+ *   - Always constructed to be unique based on configuration
+ * 
+ * - fnName: The actual function name used in the template
+ *   - If useLongFunctionName=true: uses longFnName
+ *   - If useLongFunctionName=false: uses shortFnName ("wgReduce")
+ * 
+ * Template emission logic:
+ * - When declareAndUseLocalWgTemp=true:
+ *   - Declares const TEMP_${longFnName}_MEM_SIZE
+ *   - Declares var<workgroup> ${wgTemp} array
+ *   - Function signature excludes wgTemp parameter
+ * - When declareAndUseLocalWgTemp=false:
+ *   - No workgroup declarations
+ *   - Function signature includes wgTemp parameter
  */
 export function wgReduce(args = {}) {
   const env = { ...this.env, ...args }; // properties in args overwrite this.env
